@@ -1,11 +1,27 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.1.RELEASE")
+	}
+}
+
 apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
 
 repositories {
 	jcenter()
 }
 
 dependencies {
-	testCompile 'junit:junit:4.+'
+	compile("org.springframework.boot:spring-boot-starter")
+	compile("org.springframework:spring-web")
+	compile("com.fasterxml.jackson.core:jackson-databind")
+
+	testCompile 'junit:junit'
 }
 
 sourceSets {
