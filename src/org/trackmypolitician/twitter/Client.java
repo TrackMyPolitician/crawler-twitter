@@ -4,9 +4,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,16 +11,16 @@ import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 public final class Client {
-	/**
-	 * Logger for the class
-	 */
-	private static final Logger logger = LoggerFactory.getLogger(Client.class);
 
 	/**
-	 * Header with Twitter API OAuth token
+	 * Request with Twitter API OAuth token
 	 */
+	private final HttpEntity<Object> twitterRequest;
 
-	private final HttpHeaders twitterHeader;
+	/**
+	 * REST client
+	 */
+	private final RestTemplate restClient;
 
 	/**
 	 * Constructs a client and generates OAuth token for secure requests
@@ -48,18 +45,29 @@ public final class Client {
 		// POST authorization request
 		String oauth = "https://api.twitter.com/oauth2/token";
 		HttpEntity<String> request = new HttpEntity<String>("grant_type=client_credentials", header);
-		RestTemplate rest = new RestTemplate();
-		Map<?, ?> response = rest.exchange(oauth, HttpMethod.POST, request, Map.class).getBody();
+		this.restClient = new RestTemplate();
+		Map<?, ?> response = restClient.exchange(oauth, HttpMethod.POST, request, Map.class).getBody();
 
 		// Verify response, and set token
 		if (!response.get("token_type").equals("bearer"))
 			throw new Exception("Token type is not bearer");
 
-		// Setup header for requests
-		this.twitterHeader = new HttpHeaders();
-		this.twitterHeader.setAccept(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
-		this.twitterHeader.add("Authorization", "Bearer " + (String) response.get("access_token"));
+		// Setup header and entity for requests
+		HttpHeaders twitterHeader = new HttpHeaders();
+		twitterHeader.setAccept(Arrays.asList(MediaType.APPLICATION_JSON_UTF8));
+		twitterHeader.add("Authorization", "Bearer " + (String) response.get("access_token"));
+		this.twitterRequest = new HttpEntity<>(twitterHeader);
+	}
 
-		logger.info("Logging complete");
+	/**
+	 * Gets tweets by a certain user
+	 * 
+	 * @param user
+	 *            Twitter username
+	 * @return Array of tweets
+	 */
+	public Tweet[] GetTweets(String user) {
+		String uri = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}";
+		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user).getBody();
 	}
 }

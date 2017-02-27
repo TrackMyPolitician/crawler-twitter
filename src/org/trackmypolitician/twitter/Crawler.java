@@ -32,6 +32,15 @@ public final class Crawler {
 	 * Crawl Twitter
 	 */
 	public void crawl() {
+		// Users for testing
+		String[] users = { "realDonaldTrump", "HillaryClinton" };
 
+		for (String user : users) {
+			Tweet[] tweets = twitter.GetTweets(user);
+
+			for (Tweet tweet : tweets)
+				logger.info(tweet.toString());
+
+		}
 	}
 }
