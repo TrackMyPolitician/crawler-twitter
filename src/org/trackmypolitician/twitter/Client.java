@@ -84,6 +84,6 @@ public final class Client {
 		Map<?, ?> statuses = (Map<?, ?>) resource.get("statuses");
 		Map<?, ?> user_time = (Map<?, ?>) statuses.get("/statuses/user_timeline");
 
-		return (int) user_time.get("remaining");
+		return (Integer) user_time.get("remaining");
 	}
 }
