@@ -40,7 +40,8 @@ public final class Crawler {
 
 			for (Tweet tweet : tweets)
 				logger.info(tweet.toString());
-
 		}
+
+		logger.info("Remaining requests: " + twitter.RequestsRemaining());
 	}
 }

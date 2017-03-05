@@ -70,4 +70,20 @@ public final class Client {
 		String uri = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}";
 		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user).getBody();
 	}
+
+	/**
+	 * Gets the remaining requests for user timelines
+	 * 
+	 * @return Number of remaining requests
+	 */
+	public int RequestsRemaining() {
+		String uri = "https://api.twitter.com/1.1/application/rate_limit_status.json?resources=statuses";
+
+		Map<?, ?> result = restClient.exchange(uri, HttpMethod.GET, twitterRequest, Map.class).getBody();
+		Map<?, ?> resource = (Map<?, ?>) result.get("resources");
+		Map<?, ?> statuses = (Map<?, ?>) resource.get("statuses");
+		Map<?, ?> user_time = (Map<?, ?>) statuses.get("/statuses/user_timeline");
+
+		return (int) user_time.get("remaining");
+	}
 }
