@@ -10,7 +10,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public final class Client {
+	/**
+	 * Location of the Twitter API server
+	 */
+	private static final String TWITTER = "https://api.twitter.com/1.1";
 
 	/**
 	 * Request with Twitter API OAuth token
@@ -67,8 +74,8 @@ public final class Client {
 	 * @return Array of tweets
 	 */
 	public Tweet[] GetTweets(String user) {
-		String uri = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name={user}";
-		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user).getBody();
+		String uri = "/statuses/user_timeline.json?screen_name={user}";
+		return restClient.exchange(TWITTER + uri, HttpMethod.GET, twitterRequest, Tweet[].class, user).getBody();
 	}
 
 	/**
@@ -76,14 +83,12 @@ public final class Client {
 	 * 
 	 * @return Number of remaining requests
 	 */
-	public int RequestsRemaining() {
-		String uri = "https://api.twitter.com/1.1/application/rate_limit_status.json?resources=statuses";
+	public Quota TimelineQuota() {
+		String uri = "/application/rate_limit_status.json?resources=statuses";
 
-		Map<?, ?> result = restClient.exchange(uri, HttpMethod.GET, twitterRequest, Map.class).getBody();
-		Map<?, ?> resource = (Map<?, ?>) result.get("resources");
-		Map<?, ?> statuses = (Map<?, ?>) resource.get("statuses");
-		Map<?, ?> user_time = (Map<?, ?>) statuses.get("/statuses/user_timeline");
+		JsonNode result = restClient.exchange(TWITTER + uri, HttpMethod.GET, twitterRequest, JsonNode.class).getBody();
+		JsonNode timeline = result.get("resources").get("statuses").get("/statuses/user_timeline");
 
-		return (Integer) user_time.get("remaining");
+		return new ObjectMapper().convertValue(timeline, Quota.class);
 	}
 }

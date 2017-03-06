@@ -22,21 +22,19 @@ public final class Controller {
 	public static void main(String[] args) {
 		try {
 			// Check input arguments
-			if (args.length < 3)
-				throw new Exception("Expecting 3 arguments: [Key] [Secret] [Itervals in ms]");
-			else if (args.length > 3)
+			if (args.length < 2)
+				throw new Exception("Expecting 3 arguments: [Key] [Secret]");
+			else if (args.length > 2)
 				logger.info("Ignoring extra arguments");
 
 			// Setup
-			long intervalTime = Long.parseUnsignedLong(args[2]);
 			Client twitter = new Client(args[0], args[1]);
 			Crawler crawler = new Crawler(twitter);
 
-			// Crawl at specified intervals
-			while (true) {
+			// Crawl indefinitely
+			while (true)
 				crawler.crawl();
-				Thread.sleep(intervalTime);
-			}
+
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		}

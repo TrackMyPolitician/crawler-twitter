@@ -32,16 +32,17 @@ public final class Crawler {
 	 * Crawl Twitter
 	 */
 	public void crawl() {
-		// Users for testing
-		String[] users = { "realDonaldTrump", "HillaryClinton" };
+		try {
+			Quota quota = twitter.TimelineQuota();
 
-		for (String user : users) {
-			Tweet[] tweets = twitter.GetTweets(user);
+			// TODO: Get tweets based on available requests
 
-			for (Tweet tweet : tweets)
-				logger.info(tweet.toString());
+			// Wait until quota resets
+			Thread.sleep(quota.TimeRemaining());
+
+		} catch (InterruptedException ex) {
+			// Recoverable error. Log and continue.
+			logger.error(ex.getMessage(), ex);
 		}
-
-		logger.info("Remaining requests: " + twitter.RequestsRemaining());
 	}
 }
