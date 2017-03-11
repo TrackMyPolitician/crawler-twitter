@@ -6,37 +6,48 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Immutable JSON object to represent Twitter API quotas
  *
  */
-public class Quota {
+public final class Quota {
+
+	/**
+	 * Limit construction to JSON only
+	 */
+	private Quota() {
+	}
+
 	/**
 	 * Maximum number of requests allowed
 	 */
-	public final long Limit;
+	@JsonProperty
+	private long limit;
 
 	/**
 	 * Number of requests remaining
 	 */
-	public final long Remaining;
+	@JsonProperty
+	private long remaining;
 
 	/**
 	 * Epoch time when the requests will reset
 	 */
-	public final long Reset;
+	@JsonProperty
+	private long reset;
 
 	/**
-	 * Constructs the object
+	 * Gets the maximum number of requests allowed
 	 * 
-	 * @param limit
-	 *            Maximum number of requests allowed
-	 * @param remaining
-	 *            Number of requests remaining
-	 * @param reset
-	 *            Epoch time when the requests will reset
+	 * @return Limit
 	 */
-	public Quota(@JsonProperty("limit") long limit, @JsonProperty("remaining") long remaining,
-			@JsonProperty("reset") long reset) {
-		this.Limit = limit;
-		this.Remaining = remaining;
-		this.Reset = reset;
+	public long getLimit() {
+		return limit;
+	}
+
+	/**
+	 * Gets the number of requests remaining
+	 * 
+	 * @return Remaining requests
+	 */
+	public long getRemaining() {
+		return remaining;
 	}
 
 	/**
@@ -44,8 +55,8 @@ public class Quota {
 	 * 
 	 * @return Time in milliseconds. 0 if time already reached.
 	 */
-	public long TimeRemaining() {
-		long diff = Reset * 1000 - System.currentTimeMillis();
+	public long getReset() {
+		long diff = reset * 1000 - System.currentTimeMillis();
 		return (diff < 0L) ? 0L : diff;
 	}
 }

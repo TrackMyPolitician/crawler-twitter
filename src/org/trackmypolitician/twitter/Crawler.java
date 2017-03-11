@@ -40,13 +40,13 @@ public final class Crawler {
 			Quota quota = twitter.TimelineQuota();
 
 			// Exhaust the remaining limit
-			for (long counter = 0; counter < quota.Limit; counter++) {
+			for (long counter = 0; counter < quota.getLimit(); counter++) {
 				// TODO
 
 			}
 
 			// Wait until quota resets
-			Thread.sleep(quota.TimeRemaining());
+			Thread.sleep(quota.getReset());
 
 		} catch (InterruptedException ex) {
 			// Recoverable error. Log and continue.

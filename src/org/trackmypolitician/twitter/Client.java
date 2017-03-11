@@ -79,7 +79,7 @@ public final class Client {
 	 */
 	public Tweet[] GetTweets(User user) {
 		final String uri = TWITTER + "/statuses/user_timeline.json?screen_name={user}";
-		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user.screen_name).getBody();
+		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user.getScreenName()).getBody();
 	}
 
 	/**

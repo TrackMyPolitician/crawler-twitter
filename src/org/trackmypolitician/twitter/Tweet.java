@@ -1,22 +1,46 @@
 package org.trackmypolitician.twitter;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Immutable JSON object to represent tweets
  *
  */
-public class Tweet {
-	public final String Text;
+public final class Tweet {
 
-	@JsonCreator
-	public Tweet(@JsonProperty("text") String text) {
-		this.Text = text;
+	/**
+	 * Limit construction to JSON only
+	 */
+	private Tweet() {
 	}
 
-	@Override
-	public String toString() {
-		return Text;
+	/**
+	 * Text of the tweet
+	 */
+	@JsonProperty
+	private String text;
+
+	/**
+	 * Global ID of the tweet
+	 */
+	@JsonProperty
+	private long id;
+
+	/**
+	 * Gets the text of the tweet
+	 * 
+	 * @return Tweet value
+	 */
+	public String getText() {
+		return text;
+	}
+
+	/**
+	 * Gets the global ID of the tweet
+	 * 
+	 * @return Global ID
+	 */
+	public long getID() {
+		return id;
 	}
 }

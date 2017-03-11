@@ -1,22 +1,31 @@
 package org.trackmypolitician.twitter;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Immutable JSON object to represent Twitter users
  *
  */
-public class User {
-	public final String screen_name;
+public final class User {
 
-	@JsonCreator
-	public User(@JsonProperty("screen_name") String screen_name) {
-		this.screen_name = screen_name;
+	/**
+	 * Limit construction to JSON only
+	 */
+	private User() {
 	}
 
-	@Override
-	public String toString() {
+	/**
+	 * Twitter handle of the user
+	 */
+	@JsonProperty
+	private String screen_name;
+
+	/**
+	 * Gets the user's handle (screen name)
+	 * 
+	 * @return Screen name
+	 */
+	public String getScreenName() {
 		return screen_name;
 	}
 }
