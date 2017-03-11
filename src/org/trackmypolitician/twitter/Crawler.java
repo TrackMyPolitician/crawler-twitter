@@ -3,6 +3,10 @@ package org.trackmypolitician.twitter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Crawls Twitter for tweets at allowed API intervals
+ *
+ */
 public final class Crawler {
 
 	/**
@@ -29,13 +33,17 @@ public final class Crawler {
 	}
 
 	/**
-	 * Crawl Twitter
+	 * Crawl Twitter at allowed Twitter quotas
 	 */
 	public void crawl() {
 		try {
 			Quota quota = twitter.TimelineQuota();
 
-			// TODO: Get tweets based on available requests
+			// Exhaust the remaining limit
+			for (long counter = 0; counter < quota.Limit; counter++) {
+				// TODO
+
+			}
 
 			// Wait until quota resets
 			Thread.sleep(quota.TimeRemaining());

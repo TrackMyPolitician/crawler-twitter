@@ -13,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * A class to refactor REST API for Twitter
+ *
+ */
 public final class Client {
 	/**
 	 * Location of the Twitter API server
@@ -70,23 +74,23 @@ public final class Client {
 	 * Gets tweets by a certain user
 	 * 
 	 * @param user
-	 *            Twitter username
+	 *            Twitter user
 	 * @return Array of tweets
 	 */
-	public Tweet[] GetTweets(String user) {
-		String uri = "/statuses/user_timeline.json?screen_name={user}";
-		return restClient.exchange(TWITTER + uri, HttpMethod.GET, twitterRequest, Tweet[].class, user).getBody();
+	public Tweet[] GetTweets(User user) {
+		final String uri = TWITTER + "/statuses/user_timeline.json?screen_name={user}";
+		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user.screen_name).getBody();
 	}
 
 	/**
 	 * Gets the remaining requests for user timelines
 	 * 
-	 * @return Number of remaining requests
+	 * @return Remaining quota
 	 */
 	public Quota TimelineQuota() {
-		String uri = "/application/rate_limit_status.json?resources=statuses";
+		final String uri = TWITTER + "/application/rate_limit_status.json?resources=statuses";
 
-		JsonNode result = restClient.exchange(TWITTER + uri, HttpMethod.GET, twitterRequest, JsonNode.class).getBody();
+		JsonNode result = restClient.exchange(uri, HttpMethod.GET, twitterRequest, JsonNode.class).getBody();
 		JsonNode timeline = result.get("resources").get("statuses").get("/statuses/user_timeline");
 
 		return new ObjectMapper().convertValue(timeline, Quota.class);
