@@ -2,10 +2,15 @@ package org.trackmypolitician.twitter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controls the Twitter Crawler
  */
+@RestController
+@EnableAutoConfiguration
 public final class Controller {
 
 	/**
@@ -22,6 +27,8 @@ public final class Controller {
 	 */
 	public static void main(String[] args) {
 		try {
+			SpringApplication.run(Controller.class);
+
 			Client twitter;
 
 			if (args.length == 0) {
@@ -48,7 +55,7 @@ public final class Controller {
 				args[1] = null;
 
 				if (args.length > 2)
-					logger.info("Ignoring extra arguments");
+					logger.warn("Ignoring extra arguments");
 			}
 
 			// Setup crawler

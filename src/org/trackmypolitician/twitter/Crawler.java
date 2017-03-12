@@ -54,7 +54,7 @@ public final class Crawler {
 
 		} catch (InterruptedException ex) {
 			// Recoverable error. Log and continue.
-			logger.error(ex.getMessage(), ex);
+			logger.warn(ex.getMessage(), ex);
 		}
 	}
 }

@@ -17,8 +17,7 @@ repositories {
 }
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-logging")
-	compile("org.springframework:spring-web")
+	compile("org.springframework.boot:spring-boot-starter-web")
 	compile("com.fasterxml.jackson.core:jackson-databind")
 
 	testCompile 'junit:junit'
