@@ -28,3 +28,9 @@ sourceSets {
 	main.java.srcDirs = ['src']
 	test.java.srcDirs = ['test']
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.trackmypolitician.twitter.Controller'
+    }
+}
