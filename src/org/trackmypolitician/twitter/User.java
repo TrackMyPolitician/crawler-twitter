@@ -21,11 +21,26 @@ public final class User {
 	private String screen_name;
 
 	/**
+	 * Latest processed tweet by the user
+	 */
+	@JsonProperty
+	private long last_known_tweet;
+
+	/**
 	 * Gets the user's handle (screen name)
 	 * 
 	 * @return Screen name
 	 */
 	public String getScreenName() {
 		return screen_name;
+	}
+
+	/**
+	 * Gets the latest processed tweet by the user
+	 * 
+	 * @return Tweet ID
+	 */
+	public long getLastKnownTweet() {
+		return last_known_tweet;
 	}
 }

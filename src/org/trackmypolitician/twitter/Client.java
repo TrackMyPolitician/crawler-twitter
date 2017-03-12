@@ -24,6 +24,11 @@ public final class Client {
 	private static final String TWITTER = "https://api.twitter.com/1.1";
 
 	/**
+	 * Maximum allowed per API request. TODO: Make programmatic
+	 */
+	public final int MaxTweetsPerRequest = 200;
+
+	/**
 	 * Request with Twitter API OAuth token
 	 */
 	private final HttpEntity<Object> twitterRequest;
@@ -71,15 +76,48 @@ public final class Client {
 	}
 
 	/**
-	 * Gets tweets by a certain user
+	 * Gets tweets by a certain {@link User}
 	 * 
 	 * @param user
 	 *            Twitter user
+	 * @param maxID
+	 *            Highest tweet ID
 	 * @return Array of tweets
 	 */
-	public Tweet[] GetTweets(User user) {
-		final String uri = TWITTER + "/statuses/user_timeline.json?screen_name={user}";
-		return restClient.exchange(uri, HttpMethod.GET, twitterRequest, Tweet[].class, user.getScreenName()).getBody();
+	public Tweet[] GetTweets(User user, long maxID) {
+		return GetTweets(user.getScreenName(), user.getLastKnownTweet(), maxID);
+	}
+
+	/**
+	 * Gets tweets by certain user
+	 * 
+	 * @param user
+	 *            Tweeter screen name
+	 * @param sinceID
+	 *            Lowest tweet ID
+	 * @param maxID
+	 *            Highest tweet ID
+	 * @return
+	 */
+	public Tweet[] GetTweets(final String user, final long sinceID, final long maxID) {
+		// API location
+		StringBuilder uri = new StringBuilder(TWITTER).append("/statuses/user_timeline.json");
+
+		// Screen name
+		uri.append("?screen_name=").append(user);
+
+		// Count
+		uri.append("&count=").append(MaxTweetsPerRequest);
+
+		// since_id
+		if (sinceID > 0L)
+			uri.append("&since_id=").append(sinceID);
+
+		// max_id
+		if (maxID < Long.MAX_VALUE)
+			uri.append("&max_id=").append(maxID);
+
+		return restClient.exchange(uri.toString(), HttpMethod.GET, twitterRequest, Tweet[].class).getBody();
 	}
 
 	/**

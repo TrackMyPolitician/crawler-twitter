@@ -20,6 +20,11 @@ public final class Crawler {
 	private final Client twitter;
 
 	/**
+	 * Scheduler to manage to real-time user timelines
+	 */
+	private final Scheduler scheduler;
+
+	/**
 	 * Constructs a Twitter crawler with the given Twitter client
 	 * 
 	 * @param twitter
@@ -30,6 +35,7 @@ public final class Crawler {
 			throw new NullPointerException("Twitter Client is null");
 
 		this.twitter = twitter;
+		this.scheduler = new Scheduler(this.twitter);
 	}
 
 	/**
@@ -40,10 +46,8 @@ public final class Crawler {
 			Quota quota = twitter.TimelineQuota();
 
 			// Exhaust the remaining limit
-			for (long counter = 0; counter < quota.getLimit(); counter++) {
-				// TODO
-
-			}
+			for (long counter = 0; counter < quota.getLimit(); counter++)
+				scheduler.next();
 
 			// Wait until quota resets
 			Thread.sleep(quota.getReset());
