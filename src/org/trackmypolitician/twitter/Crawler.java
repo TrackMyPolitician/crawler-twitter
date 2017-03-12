@@ -43,11 +43,18 @@ public final class Crawler {
 	 */
 	public void crawl() {
 		try {
+			logger.info("Crawling...");
+
+			// Get available quota
 			Quota quota = twitter.TimelineQuota();
 
+			logger.info("Requests available: " + quota.getRemaining());
+
 			// Exhaust the remaining limit
-			for (long counter = 0; counter < quota.getLimit(); counter++)
+			for (long counter = 0; counter < quota.getRemaining(); counter++)
 				scheduler.next();
+
+			logger.info("Requests exhausted: sleeping until request quota resets");
 
 			// Wait until quota resets
 			Thread.sleep(quota.getReset());
