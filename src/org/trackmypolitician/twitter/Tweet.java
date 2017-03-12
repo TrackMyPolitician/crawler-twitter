@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Immutable JSON object to represent tweets
  *
  */
-public final class Tweet {
+public final class Tweet implements Comparable<Tweet> {
 
 	/**
 	 * Limit construction to JSON only
@@ -42,5 +42,13 @@ public final class Tweet {
 	 */
 	public long getID() {
 		return id;
+	}
+
+	/**
+	 * Sorts tweets in descending order (newer on top)
+	 */
+	@Override
+	public int compareTo(Tweet other) {
+		return -Long.compare(id, other.id);
 	}
 }
