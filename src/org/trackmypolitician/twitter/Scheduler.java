@@ -62,13 +62,13 @@ public class Scheduler {
 	}
 
 	/**
-	 * Updates the user list at initialization and at the of the cycle
+	 * Updates the user list at the beginning of the cycle
 	 */
 	private void updateUsers() {
 		/*
-		 * Since userIndex = 0, and users = Empty, this runs at least once. When
+		 * Since userIndex = 0 and users = Empty, this runs at least once. When
 		 * the end of user list is reached, the user list is updated, and
-		 * iterations over the user restarts. This ensures infinite cycles.
+		 * iteration over the users restarts. This ensures infinite cycles.
 		 */
 		if (userIndex >= users.length) {
 			// users = TODO Get users from database
@@ -104,7 +104,7 @@ public class Scheduler {
 	 */
 	private void nextUser() {
 		if (!userTweets.isEmpty()) {
-			// TODO Send for processing
+			// TODO: Send for processing
 			// TODO: Update last_known_tweet to userTweets.get(0)
 
 			// Empty for the next user

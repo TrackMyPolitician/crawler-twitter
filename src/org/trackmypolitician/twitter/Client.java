@@ -81,22 +81,23 @@ public final class Client {
 	 * @param user
 	 *            Twitter user
 	 * @param maxID
-	 *            Highest tweet ID
+	 *            Highest tweet ID (inclusive)
 	 * @return Array of tweets
 	 */
 	public Tweet[] GetTweets(User user, long maxID) {
 		return GetTweets(user.getScreenName(), user.getLastKnownTweet(), maxID);
 	}
-
+ 
+	
 	/**
 	 * Gets tweets by certain user
 	 * 
 	 * @param user
 	 *            Tweeter screen name
 	 * @param sinceID
-	 *            Lowest tweet ID
+	 *            Lowest tweet ID (exclusive)
 	 * @param maxID
-	 *            Highest tweet ID
+	 *            Highest tweet ID (inclusive)
 	 * @return
 	 */
 	public Tweet[] GetTweets(final String user, final long sinceID, final long maxID) {

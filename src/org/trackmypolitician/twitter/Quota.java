@@ -27,7 +27,7 @@ public final class Quota {
 	private long remaining;
 
 	/**
-	 * Epoch time when the requests will reset
+	 * Epoch time when the requests will reset (in seconds)
 	 */
 	@JsonProperty
 	private long reset;
@@ -56,7 +56,7 @@ public final class Quota {
 	 * @return Time in milliseconds. 0 if time already reached.
 	 */
 	public long getReset() {
-		long diff = reset * 1000 - System.currentTimeMillis();
+		long diff = reset * 1000L - System.currentTimeMillis();
 		return (diff < 0L) ? 0L : diff;
 	}
 }
