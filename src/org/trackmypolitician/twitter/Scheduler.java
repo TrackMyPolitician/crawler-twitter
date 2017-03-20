@@ -10,21 +10,21 @@ import java.util.Arrays;
 public class Scheduler {
 
 	/**
-	 * Twitter client to access tweets
+	 * Parent crawler
 	 */
-	private final Client twitter;
+	public final Crawler Crawler;
 
 	/**
 	 * Constructs an instance of Scheduler
 	 * 
-	 * @param twitter
-	 *            Twitter client
+	 * @param crawler
+	 *            Parent crawler
 	 */
-	public Scheduler(Client twitter) {
-		if (twitter == null)
-			throw new NullPointerException("Twitter Client is null");
+	public Scheduler(Crawler crawler) {
+		if (crawler == null)
+			throw new NullPointerException("Crawler is null");
 
-		this.twitter = twitter;
+		Crawler = crawler;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Scheduler {
 		Tweet[] tweets = nextPage();
 
 		// If the page size is lower than requested, it must be the final page
-		if (tweets.length < twitter.MaxTweetsPerRequest)
+		if (tweets.length < Crawler.Client.MaxTweetsPerRequest)
 			nextUser();
 	}
 
@@ -92,7 +92,7 @@ public class Scheduler {
 		 * The userTweet is always sorted newest to oldest tweet.
 		 */
 		long maxID = userTweets.isEmpty() ? Long.MAX_VALUE : (userTweets.get(userTweets.size() - 1).getID() - 1);
-		Tweet[] page = twitter.GetTweets(users[userIndex], maxID);
+		Tweet[] page = Crawler.Client.GetTweets(users[userIndex], maxID);
 
 		userTweets.addAll(Arrays.asList(page));
 

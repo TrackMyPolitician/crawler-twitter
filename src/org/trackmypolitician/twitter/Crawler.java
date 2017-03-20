@@ -17,7 +17,12 @@ public final class Crawler {
 	/**
 	 * Twitter client to access tweets
 	 */
-	private final Client twitter;
+	public final Client Client;
+
+	/**
+	 * Database to retrieve and store results
+	 */
+	public final Database Database;
 
 	/**
 	 * Scheduler to manage to real-time user timelines
@@ -29,13 +34,20 @@ public final class Crawler {
 	 * 
 	 * @param twitter
 	 *            Twitter client
+	 * @param database
+	 *            Database object
 	 */
-	public Crawler(Client twitter) {
-		if (twitter == null)
+	public Crawler(Client client, Database database) {
+		if (client == null)
 			throw new NullPointerException("Twitter Client is null");
 
-		this.twitter = twitter;
-		this.scheduler = new Scheduler(this.twitter);
+		if (database == null)
+			throw new NullPointerException("Database is null");
+
+		Client = client;
+		Database = database;
+
+		scheduler = new Scheduler(this);
 	}
 
 	/**
@@ -46,7 +58,7 @@ public final class Crawler {
 			logger.info("Crawling...");
 
 			// Get available quota
-			Quota quota = twitter.TimelineQuota();
+			Quota quota = Client.TimelineQuota();
 
 			logger.info("Requests available: " + quota.getRemaining());
 
